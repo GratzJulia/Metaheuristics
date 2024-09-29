@@ -10,3 +10,7 @@ python -m venv .env
 source ./env/bin/activate
 deactivate
 ```
+#### Creating gitignore:
+```bash
+touch .gitignore
+```
