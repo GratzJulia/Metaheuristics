@@ -14,7 +14,8 @@ def solveMochila(len: int, P, W, C: int, s = []):
 
     for i in range(len):
         if C - sortingCriteria[i]['w'] >= 0:
-            s.append(sortingCriteria[i])
+            # s.append(sortingCriteria[i])
+            s.append(i+1)
             C = C - sortingCriteria[i]['w']
     
     return s
@@ -25,7 +26,7 @@ def main():
 
     lenItems = csv.get('Items').size
     allW = csv.get('w') # grandeza relacionada ao espaco fisico
-    allP = csv.get('p') # valor do item (recompensa)
+    allP = csv.get('p') # valor do item (custo/recompensa)
     s = []
     # c = (7)
     c = (9)
@@ -36,7 +37,7 @@ def main():
     
     s = solveMochila(lenItems, allP, allW, c)
     print('Solution set: ', s)
-    
+
 
 if __name__ == "__main__":
     main()
