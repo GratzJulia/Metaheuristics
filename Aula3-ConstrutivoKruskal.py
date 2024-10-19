@@ -1,14 +1,20 @@
+class Aresta:
+    def __init__(self, custo, i, j):
+        self.origem: int = i
+        self.destino:int = j
+        self.custo: float = custo
 
 class Grafo:
     def __init__(self, vertices):
-        self.V = vertices
+        self.V: int = vertices
         self.arestas = []
 
     def add_aresta(self, i, j, custo):
-        self.arestas.append((custo, i, j))
+        self.arestas.append(Aresta(custo, i, j))
 
 def kruskal(G: Grafo):
-    G.arestas.sort()
+    # Heuristica Construtiva
+    G.arestas.sort(key=lambda a: a.custo)
     pai = {}
     rank = {}
 
@@ -38,11 +44,11 @@ def kruskal(G: Grafo):
     AGM = []  # Arvore Geradora Minima
     count_aresta = 0
 
-    for peso, i, j in G.arestas:
-        forma_ciclo = find(i) == find(j)
+    for aresta in G.arestas:
+        forma_ciclo = find(aresta.origem) == find(aresta.destino)
         if not forma_ciclo:
-            union(i, j)
-            AGM.append((i, j, peso))
+            union(aresta.origem, aresta.destino)
+            AGM.append(aresta)
             count_aresta += 1
 
         if count_aresta == G.V - 1: break
@@ -63,4 +69,4 @@ if __name__ == "__main__":
 
     agm = kruskal(g)
     print("Arestas da Árvore Geradora Mínima:")
-    [print(f"{i}-{j}: {custo}") for i, j, custo in agm]
+    [print(f"{a.origem}-{a.destino}: {a.custo}") for a in agm]
