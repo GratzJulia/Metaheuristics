@@ -1,5 +1,5 @@
 from math import e, pow
-from random import random
+from random import random, uniform
 
 def criterioParadaSA(countTemperatura, countMelhoria, maxMetropolis):
     return countTemperatura < maxMetropolis or countMelhoria < 100
@@ -26,10 +26,7 @@ def Metropolis(fo: function, vizinhos: list, maxMetropolis: int, s, T: float):
     return melhorSolucao
 
 def geraAlfa() -> float:
-    aleatorio = random()
-    if aleatorio > 0.8 and aleatorio < 0.99: return aleatorio
-    
-    return geraAlfa()
+    return uniform(0.8, 0.99)
 
 def taxaResfriamentoGeometrico(temperatura: float):
     alfa = geraAlfa()
