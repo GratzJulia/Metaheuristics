@@ -4,6 +4,9 @@ class Aresta:
         self.destino:int = j
         self.custo: float = custo
 
+    def __str__(self):
+        return f"Aresta {self.origem}-{self.destino} com custo {self.custo}"
+
 class Grafo:
     def __init__(self, vertices):
         self.V: int = vertices
