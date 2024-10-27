@@ -12,6 +12,9 @@ class Grafo:
         self.V: int = vertices
         self.arestas = []
 
+    def __str__(self):
+        return f"Grafo com {self.V} vértices e {len(self.arestas)} arestas"
+
     def add_aresta(self, i, j, custo):
         self.arestas.append(Aresta(custo, i, j))
 
