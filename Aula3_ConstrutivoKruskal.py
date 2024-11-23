@@ -1,22 +1,4 @@
-class Aresta:
-    def __init__(self, custo, i, j):
-        self.origem: int = i
-        self.destino:int = j
-        self.custo: float = custo
-
-    def __str__(self):
-        return f"Aresta {self.origem}-{self.destino} com custo {self.custo}"
-
-class Grafo:
-    def __init__(self, vertices):
-        self.V: int = vertices
-        self.arestas = []
-
-    def __str__(self):
-        return f"Grafo com {self.V} vértices e {len(self.arestas)} arestas"
-
-    def add_aresta(self, i, j, custo):
-        self.arestas.append(Aresta(custo, i, j))
+from representacao import Grafo
 
 def kruskal(G: Grafo):
     # Heuristica Construtiva
