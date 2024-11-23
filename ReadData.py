@@ -13,7 +13,7 @@ def read_DIMACS(file):
             qtd_v = int(qtd[2])
             qtd_a = int(qtd[3])
             continue
-        elif line.startswith('c'):
+        elif line.startswith('c') or line.startswith('!'):
             continue
         
         data = line.split()
