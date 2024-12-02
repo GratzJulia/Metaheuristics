@@ -17,8 +17,10 @@ def read_DIMACS(file):
             continue
         
         data = line.split()
-        data.reverse()  # ordem não importa para grafos não direcionados!
-        data.pop()
+        if data[0] == 'e':
+            data.reverse()  # ordem não importa para grafos não direcionados!
+            data.pop()
+        
         a = (int(data[0]), int(data[1]))
         arestas.append(a)
 
