@@ -15,8 +15,10 @@ def printGrafo(v: int, a: int, colors: list = ['white']):
 class AlgoritmoGenetico:
     def __init__(self, grafo: Grafo):
         self.grafo = grafo
+        self.tamanho_populacao = 2 * grafo.V
+        self.len_elites = 0.2 * self.tamanho_populacao
 
-    def funcao_objetivo(self, cromossomo):
+    def FO(self, cromossomo):
         penalidade_aresta = 0
         cor_count = {}
 
@@ -39,14 +41,19 @@ class AlgoritmoGenetico:
         return penalidade_aresta + 0.1 * len(cor_count) + 0.5 * desequilibrio
 
     def fitness(self, cromossomo):
-        return -1 * self.funcao_objetivo(cromossomo)
+        return -1 * self.FO(cromossomo)
 
-    def construtivo_aleatorio(self, tam_populacao):
+    def construtivo_aleatorio(self):
         populacao = []
-        for _ in range(tam_populacao):
+        for _ in range(self.tamanho_populacao):
             cromossomo = [randint(1, self.grafo.V) for _ in range(self.grafo.V)]
             populacao.append(cromossomo)
         return populacao
+
+    def set_elite(self, populacao: list):
+        # aplicar o fitness na populacao
+        selecionados = sample(populacao, int(self.len_elites))
+        return selecionados
 
     def crossover(self, pai1, pai2):
         ponto_corte = randint(1, len(pai1) - 1)
@@ -69,15 +76,16 @@ class AlgoritmoGenetico:
             pais = pais[:-1]
         return pais
 
-    def execute(self, geracoes=100, tamanho_populacao=50):
-        populacao = self.construtivo_aleatorio(tamanho_populacao)
+    def execute(self, geracoes=100):
+        populacao = self.construtivo_aleatorio()
+        elites = self.set_elite(populacao)
 
         for geracao in range(geracoes):
             fitness_populacao = [self.fitness(cromossomo) for cromossomo in populacao]
 
             melhores_pais = self.selecionar_pais(populacao, fitness_populacao)
 
-            nova_populacao = []
+            nova_populacao = elites.copy()
             for i in range(0, len(melhores_pais), 2):
                 pai1, pai2 = melhores_pais[i], melhores_pais[i + 1]
                 filho1 = self.crossover(pai1, pai2)
@@ -90,7 +98,7 @@ class AlgoritmoGenetico:
             if len(nova_populacao) > 0:
                 populacao = nova_populacao
 
-        melhor_individuo = min(populacao, key=lambda cromossomo: self.funcao_objetivo(cromossomo))
+        melhor_individuo = min(populacao, key=lambda cromossomo: self.FO(cromossomo))
         return melhor_individuo
 
 
@@ -102,6 +110,6 @@ if __name__ == "__main__":
     [g.add_aresta(arestas[i][0], arestas[i][1], 0.0) for i in range(a)]
     
     ag = AlgoritmoGenetico(g)
-    melhor_colocacao = ag.execute(geracoes=10, tamanho_populacao=6)
+    melhor_colocacao = ag.execute(geracoes=10)
     print(melhor_colocacao)
     printGrafo(v, a, melhor_colocacao)
