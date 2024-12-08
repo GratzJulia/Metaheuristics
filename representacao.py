@@ -31,7 +31,7 @@ class Grafo:
         if i not in self.vertices[j-1].vizinhos: self.vertices[j-1].vizinhos.append(i)
         if j not in self.vertices[i-1].vizinhos: self.vertices[i-1].vizinhos.append(j)
 
-
-# class solucao:
-    # representacao da solucao:
-    # qtd cores para usar, qtd de cada cor usada, qual cor está cada veritice
+class Individuo:
+    def __init__(self, c, fitness):
+        self.value: float = fitness
+        self.cromossomo: list = c
