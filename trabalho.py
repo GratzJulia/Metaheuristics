@@ -1,10 +1,10 @@
 from random import choices, randint, random, sample
 from collections import Counter
-from representacao import Grafo, Individuo
-from ReadData import read_DIMACS
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from ReadData import read_DIMACS
+from representacao import Grafo, Individuo
 
 def printGrafo(v: int, a: int, title: str, colors: list = ['white']):
     G = nx.Graph()
@@ -113,7 +113,7 @@ class AlgoritmoGenetico:
 
 
 if __name__ == "__main__":
-    v, a, arestas = read_DIMACS('./input-data/S10.txt')
+    v, a, arestas = read_DIMACS('./input-data/K7_3.txt')
 
     g = Grafo(v)
     [g.add_aresta(arestas[i][0], arestas[i][1], 0.0) for i in range(a)]
@@ -124,4 +124,4 @@ if __name__ == "__main__":
     melhor_colocacao: Individuo = ag.execute(geracoes=40)
     print(melhor_colocacao.cromossomo)
     print(melhor_colocacao.value)
-    printGrafo(v, a, str(g), melhor_colocacao.cromossomo)
+    printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
