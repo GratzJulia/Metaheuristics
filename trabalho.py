@@ -1,15 +1,18 @@
-from random import randint, sample
-from representacao import Grafo
+from random import choices, randint, random, sample
+from collections import Counter
+from representacao import Grafo, Individuo
 from ReadData import read_DIMACS
 import matplotlib.pyplot as plt
 import networkx as nx
+import numpy as np
 
-def printGrafo(v: int, a: int, colors: list = ['white']):
+def printGrafo(v: int, a: int, title: str, colors: list = ['white']):
     G = nx.Graph()
     [G.add_node(i+1) for i in range(v)]
     [G.add_edge(arestas[i][0], arestas[i][1]) for i in range(a)]
 
-    nx.draw(G, with_labels=True, node_color=colors, node_size=400, edgecolors='black', linewidths=1)
+    plt.title(title)
+    nx.draw(G, with_labels=True, node_color=colors, node_size=450, edgecolors='black', linewidths=1)
     plt.show()
 
 class AlgoritmoGenetico:
@@ -17,28 +20,29 @@ class AlgoritmoGenetico:
         self.grafo = grafo
         self.tamanho_populacao = 2 * grafo.V
         self.len_elites = 0.2 * self.tamanho_populacao
+        self.len_nao_elites = self.tamanho_populacao - self.len_elites
 
-    def FO(self, cromossomo):
+    def FO(self, cromossomo) -> float:
         penalidade_aresta = 0
-        cor_count = {}
+        for a in self.grafo.arestas:
+            if cromossomo[a.origem - 1] == cromossomo[a.destino - 1]:
+                penalidade_aresta += 1
 
-        # 1. Violação de restrições
-        for aresta in self.grafo.arestas:
-            if cromossomo[aresta.origem - 1] == cromossomo[aresta.destino - 1]:
-                penalidade_aresta += 20
+        qtd_cores = len(set(cromossomo))
 
-        # 2. Contagem das cores usadas
-        for i, cor in enumerate(cromossomo):
-            if cor not in cor_count:
-                cor_count[cor] = 0
-            cor_count[cor] += 1
+        cor_count = Counter(cromossomo)
+        floor_val = self.grafo.V // qtd_cores
+        ceil_val = floor_val + (1 if self.grafo.V % qtd_cores != 0 else 0)
 
-        # 3. Desequilíbrio nas cores
-        max_count = max(cor_count.values(), default=0)
-        min_count = min(cor_count.values(), default=0)
-        desequilibrio = max_count - min_count
+        distribution_penalty = 0
+        for ccount in cor_count.values():
+            if ccount < floor_val:
+                distribution_penalty += (floor_val - ccount) ** 2
+            elif ccount > ceil_val:
+                distribution_penalty += (ccount - ceil_val) ** 2
 
-        return penalidade_aresta + 0.1 * len(cor_count) + 0.5 * desequilibrio
+        distribution_penalty *= 100
+        return float(penalidade_aresta * 1000 + qtd_cores * 100 + distribution_penalty)
 
     def fitness(self, cromossomo):
         return -1 * self.FO(cromossomo)
@@ -47,69 +51,77 @@ class AlgoritmoGenetico:
         populacao = []
         for _ in range(self.tamanho_populacao):
             cromossomo = [randint(1, self.grafo.V) for _ in range(self.grafo.V)]
-            populacao.append(cromossomo)
+            populacao.append(Individuo(cromossomo, self.fitness(cromossomo)))
         return populacao
 
     def set_elite(self, populacao: list):
-        # aplicar o fitness na populacao
-        selecionados = sample(populacao, int(self.len_elites))
-        return selecionados
+        fitness_ordenado = sorted(populacao, key=lambda i: i.value, reverse=True)
+        melhores = fitness_ordenado[:int(self.len_elites)]
+        piores = fitness_ordenado[int(self.len_elites):]
+        return melhores, piores
 
     def crossover(self, pai1, pai2):
-        ponto_corte = randint(1, len(pai1) - 1)
-        filho = pai1[:ponto_corte] + pai2[ponto_corte:]
-        return filho
+        ponto_corte = randint(1, len(pai1.cromossomo) - 1)
+        filho = pai1.cromossomo[:ponto_corte] + pai2.cromossomo[ponto_corte:]
+        return Individuo(filho, self.fitness(filho))
 
-    def mutacao(self, cromossomo):
-        idx = randint(0, len(cromossomo) - 1)
-        cromossomo[idx] = randint(1, len(cromossomo) - 1)
+    def mutacao(self, individuo: Individuo):
+        gene_aleatorio = randint(0, len(individuo.cromossomo) - 1)
+        individuo.cromossomo[gene_aleatorio] = randint(1, len(individuo.cromossomo) - 1)
+        individuo.value = self.fitness(individuo.cromossomo)
 
-    def selecionar_pais(self, populacao, fitness_populacao):
-        # Seleção por torneio
-        pais = []
-        for _ in range(len(populacao) // 2):
-            selecionados = sample(list(zip(populacao, fitness_populacao)), 2)
-            pais.append(max(selecionados, key=lambda x: x[1])[0])  # Seleciona o melhor pai
+    def torneio_numpy(self, populacao, N, q = 2):
+        fitness = np.array([ind.value for ind in populacao])
+        torneios = np.random.choice(len(populacao), size=(N, q), replace=True)
+        vencedores_indices = torneios[np.arange(N), np.argmax(fitness[torneios], axis=1)]
+        return [populacao[idx] for idx in vencedores_indices]
 
-        # Se o número de pais for ímpar, remove o último pai
-        if len(pais) % 2 != 0:
-            pais = pais[:-1]
+    def roleta(self, populacao, fitness_populacao):
+        min_fitness = min(fitness_populacao)
+        ajustado = [f - min_fitness + 1 for f in fitness_populacao]
+        pais = choices(populacao, weights=ajustado, k=len(populacao) // 2)
         return pais
 
     def execute(self, geracoes=100):
         populacao = self.construtivo_aleatorio()
-        elites = self.set_elite(populacao)
-
+        
         for geracao in range(geracoes):
-            fitness_populacao = [self.fitness(cromossomo) for cromossomo in populacao]
-
-            melhores_pais = self.selecionar_pais(populacao, fitness_populacao)
-
+            elites, nao_elites = self.set_elite(populacao)
             nova_populacao = elites.copy()
-            for i in range(0, len(melhores_pais), 2):
-                pai1, pai2 = melhores_pais[i], melhores_pais[i + 1]
-                filho1 = self.crossover(pai1, pai2)
-                filho2 = self.crossover(pai2, pai1)
-                self.mutacao(filho1)
-                self.mutacao(filho2)
-                nova_populacao.append(filho1)
-                nova_populacao.append(filho2)
+            novos_individuos = []
 
-            if len(nova_populacao) > 0:
-                populacao = nova_populacao
+            while len(novos_individuos) < self.len_nao_elites:
+                probabilidade = random()
+                if probabilidade < 0.94:
+                    pais = self.torneio_numpy(populacao, 2)
+                    filho1 = self.crossover(pais[0], pais[1])
+                    filho2 = self.crossover(pais[1], pais[0])
+                    novos_individuos.append(filho1)
+                    novos_individuos.append(filho2)
+                else:
+                    aleatorio = sample(nao_elites, 1)
+                    self.mutacao(aleatorio[0])
 
-        melhor_individuo = min(populacao, key=lambda cromossomo: self.FO(cromossomo))
+            uniao = populacao + novos_individuos
+            escolhidos = self.torneio_numpy(uniao, len(nao_elites))
+            selecionados = nova_populacao + escolhidos
+            populacao.clear()
+            populacao.extend(selecionados)
+
+        melhor_individuo = min(populacao, key=lambda ind: self.FO(ind.cromossomo))
         return melhor_individuo
 
 
 if __name__ == "__main__":
     v, a, arestas = read_DIMACS('./input-data/S10.txt')
-    printGrafo(v, a)
 
     g = Grafo(v)
     [g.add_aresta(arestas[i][0], arestas[i][1], 0.0) for i in range(a)]
     
+    printGrafo(v, a, str(g))
+
     ag = AlgoritmoGenetico(g)
-    melhor_colocacao = ag.execute(geracoes=10)
-    print(melhor_colocacao)
-    printGrafo(v, a, melhor_colocacao)
+    melhor_colocacao: Individuo = ag.execute(geracoes=40)
+    print(melhor_colocacao.cromossomo)
+    print(melhor_colocacao.value)
+    printGrafo(v, a, str(g), melhor_colocacao.cromossomo)
