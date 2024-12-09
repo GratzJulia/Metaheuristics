@@ -82,7 +82,7 @@ class AlgoritmoGenetico:
         pais = choices(populacao, weights=ajustado, k=len(populacao) // 2)
         return pais
 
-    def execute(self, geracoes=100):
+    def execute(self, geracoes=1000):
         populacao = self.construtivo_aleatorio()
         
         for geracao in range(geracoes):
@@ -91,22 +91,23 @@ class AlgoritmoGenetico:
             novos_individuos = []
 
             while len(novos_individuos) < self.len_nao_elites:
-                probabilidade = random()
-                if probabilidade < 0.94:
+                probabilidade_cruz = random()
+                probabilidade_mut = random()
+                if probabilidade_cruz < 0.94:
                     pais = self.torneio_numpy(populacao, 2)
                     filho1 = self.crossover(pais[0], pais[1])
                     filho2 = self.crossover(pais[1], pais[0])
                     novos_individuos.append(filho1)
                     novos_individuos.append(filho2)
-                else:
+                
+                if probabilidade_mut <= 0.05:
                     aleatorio = sample(nao_elites, 1)
                     self.mutacao(aleatorio[0])
 
             uniao = populacao + novos_individuos
             escolhidos = self.torneio_numpy(uniao, len(nao_elites))
-            selecionados = nova_populacao + escolhidos
             populacao.clear()
-            populacao.extend(selecionados)
+            populacao.extend(nova_populacao + escolhidos)
 
         melhor_individuo = min(populacao, key=lambda ind: self.FO(ind.cromossomo))
         return melhor_individuo
@@ -121,7 +122,7 @@ if __name__ == "__main__":
     printGrafo(v, a, str(g))
 
     ag = AlgoritmoGenetico(g)
-    melhor_colocacao: Individuo = ag.execute(geracoes=40)
+    melhor_colocacao: Individuo = ag.execute(geracoes=60)
     print(melhor_colocacao.cromossomo)
     print(melhor_colocacao.value)
     printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
