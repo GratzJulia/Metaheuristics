@@ -84,7 +84,10 @@ class AlgoritmoGenetico:
 
     def execute(self, geracoes=1000):
         populacao = self.construtivo_aleatorio()
-        
+        melhor_inicial = min(populacao, key=lambda ind: ind.value)
+        print('Melhor cromossomo do construtivo:', melhor_inicial.cromossomo)
+        print('Melhor fitness do construtivo: ', melhor_inicial.value)
+
         for geracao in range(geracoes):
             elites, nao_elites = self.set_elite(populacao)
             nova_populacao = elites.copy()
@@ -123,6 +126,6 @@ if __name__ == "__main__":
 
     ag = AlgoritmoGenetico(g)
     melhor_colocacao: Individuo = ag.execute(geracoes=60)
-    print(melhor_colocacao.cromossomo)
-    print(melhor_colocacao.value)
+    print('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
+    print('Melhor fitness final: ', melhor_colocacao.value)
     printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
