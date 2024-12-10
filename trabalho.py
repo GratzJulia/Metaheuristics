@@ -23,7 +23,7 @@ class AlgoritmoGenetico:
         self.len_elites = 0.2 * self.tamanho_populacao
         self.len_nao_elites = self.tamanho_populacao - self.len_elites
 
-    def FO(self, cromossomo) -> float:
+    def FO(self, cromossomo):
         penalidade_aresta = 0
         for a in self.grafo.arestas:
             if cromossomo[a.origem - 1] == cromossomo[a.destino - 1]:
@@ -35,24 +35,26 @@ class AlgoritmoGenetico:
         floor_val = self.grafo.V // qtd_cores
         ceil_val = floor_val + (1 if self.grafo.V % qtd_cores != 0 else 0)
 
-        distribution_penalty = 0
+        desequilibrio = 0
         for ccount in cor_count.values():
             if ccount < floor_val:
-                distribution_penalty += (floor_val - ccount) ** 2
+                desequilibrio += (floor_val - ccount) ** 2
             elif ccount > ceil_val:
-                distribution_penalty += (ccount - ceil_val) ** 2
+                desequilibrio += (ccount - ceil_val) ** 2
 
-        distribution_penalty *= 100
-        return float(penalidade_aresta * 1000 + qtd_cores * 100 + distribution_penalty)
+        return {"fo": float(penalidade_aresta * 1000 + qtd_cores * 100 + desequilibrio * 10), "p": penalidade_aresta, "c": qtd_cores, "d": desequilibrio}
 
     def fitness(self, cromossomo):
-        return -1 * self.FO(cromossomo)
+        obj = self.FO(cromossomo)
+        obj['fo'] *= -1
+        return obj
 
     def construtivo_aleatorio(self):
         populacao = []
         for _ in range(self.tamanho_populacao):
             cromossomo = [randint(1, self.grafo.V) for _ in range(self.grafo.V)]
-            populacao.append(Individuo(cromossomo, self.fitness(cromossomo)))
+            f = self.fitness(cromossomo)
+            populacao.append(Individuo(cromossomo, f['fo'], f['c'], f['p'], f['d']))
         return populacao
 
     def set_elite(self, populacao: list):
@@ -64,12 +66,17 @@ class AlgoritmoGenetico:
     def crossover(self, pai1, pai2):
         ponto_corte = randint(1, len(pai1.cromossomo) - 1)
         filho = pai1.cromossomo[:ponto_corte] + pai2.cromossomo[ponto_corte:]
-        return Individuo(filho, self.fitness(filho))
+        f = self.fitness(filho)
+        return Individuo(filho, f['fo'], f['c'], f['p'], f['d'])
 
     def mutacao(self, individuo: Individuo):
         gene_aleatorio = randint(0, len(individuo.cromossomo) - 1)
         individuo.cromossomo[gene_aleatorio] = randint(1, len(individuo.cromossomo) - 1)
-        individuo.value = self.fitness(individuo.cromossomo)
+        f = self.fitness(individuo.cromossomo)
+        individuo.value = f['fo']
+        individuo.qtd_cores = f['c']
+        individuo.rest_aresta = f['p']
+        individuo.desequilibrio = f['d']
 
     def torneio_numpy(self, populacao, N, q = 2):
         fitness = np.array([ind.value for ind in populacao])
@@ -85,8 +92,11 @@ class AlgoritmoGenetico:
 
     def execute(self, geracoes=1000):
         populacao = self.construtivo_aleatorio()
-        melhor_inicial = min(populacao, key=lambda ind: ind.value)
+        melhor_inicial = max(populacao, key=lambda ind: ind.value)
         print('Melhor cromossomo do construtivo:', melhor_inicial.cromossomo)
+        print('Qtd cores:', melhor_inicial.qtd_cores)
+        print('Penalidade restrição de arestas:', melhor_inicial.rest_aresta)
+        print('Desequilibrio de cores:', melhor_inicial.desequilibrio)
         print('Melhor fitness do construtivo: ', melhor_inicial.value)
 
         for geracao in range(geracoes):
@@ -113,25 +123,30 @@ class AlgoritmoGenetico:
             populacao.clear()
             populacao.extend(nova_populacao + escolhidos)
 
-        melhor_individuo = min(populacao, key=lambda ind: self.FO(ind.cromossomo))
+        melhor_individuo = max(populacao, key=lambda ind: ind.value)
         return melhor_individuo
 
+def main():
+    g = Grafo(v)
+    [g.add_aresta(arestas[i][0], arestas[i][1], 0.0) for i in range(a)]
+    print(g)
+    # printGrafo(v, a, str(g))
+
+    ag = AlgoritmoGenetico(g)
+    ag_inicio = datetime.now()
+    melhor_colocacao: Individuo = ag.execute(geracoes=500)
+    ag_fim = datetime.now()
+    print('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
+    print('Qtd cores:', melhor_colocacao.qtd_cores)
+    print('Penalidade restrição de arestas:', melhor_colocacao.rest_aresta)
+    print('Desequilibrio de cores:', melhor_colocacao.desequilibrio)
+    print('Melhor fitness final: ', melhor_colocacao.value)
+    print('Tempo de execução: ', ag_fim - ag_inicio)
+    print()
+    # printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
 
 if __name__ == "__main__":
-    for i in instancias():
-        v, a, arestas = read_DIMACS('./input-data/' + i)
-        print('Instância: ', i)
-        g = Grafo(v)
-        [g.add_aresta(arestas[i][0], arestas[i][1], 0.0) for i in range(a)]
-        print(g)
-        # printGrafo(v, a, str(g))
-
-        ag = AlgoritmoGenetico(g)
-        ag_inicio = datetime.now()
-        melhor_colocacao: Individuo = ag.execute(geracoes=300)
-        ag_fim = datetime.now()
-        print('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
-        print('Melhor fitness final: ', melhor_colocacao.value)
-        print('Tempo de execução: ', ag_fim - ag_inicio)
-        print()
-        # printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
+    for nome in instancias():
+        v, a, arestas = read_DIMACS('./input-data/' + nome)
+        print('Instância: ', nome)
+        main()

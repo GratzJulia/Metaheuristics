@@ -32,6 +32,9 @@ class Grafo:
         if j not in self.vertices[i-1].vizinhos: self.vertices[i-1].vizinhos.append(j)
 
 class Individuo:
-    def __init__(self, c, fitness):
+    def __init__(self, c, fitness, qc, p, d):
         self.value: float = fitness
         self.cromossomo: list = c
+        self.qtd_cores: int = qc
+        self.rest_aresta: int = p
+        self.desequilibrio: int = d
