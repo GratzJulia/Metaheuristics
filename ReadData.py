@@ -1,3 +1,5 @@
+from pathlib import Path
+
 def read_DIMACS(file):
     with open(file, 'r') as f:
         lines = f.readlines()
@@ -25,3 +27,7 @@ def read_DIMACS(file):
         arestas.append(a)
 
     return qtd_v, qtd_a, arestas
+
+def instancias():
+    p = Path('./input-data/')
+    return [arq.stem + arq.suffix for arq in p.iterdir() if arq.suffix not in ['.csv', '.zip']]

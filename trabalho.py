@@ -1,9 +1,10 @@
 from random import choices, randint, random, sample
 from collections import Counter
+from datetime import datetime
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-from ReadData import read_DIMACS
+from ReadData import read_DIMACS, instancias
 from representacao import Grafo, Individuo
 
 def printGrafo(v: int, a: int, title: str, colors: list = ['white']):
@@ -117,15 +118,20 @@ class AlgoritmoGenetico:
 
 
 if __name__ == "__main__":
-    v, a, arestas = read_DIMACS('./input-data/K7_3.txt')
+    for i in instancias():
+        v, a, arestas = read_DIMACS('./input-data/' + i)
+        print('Instância: ', i)
+        g = Grafo(v)
+        [g.add_aresta(arestas[i][0], arestas[i][1], 0.0) for i in range(a)]
+        print(g)
+        # printGrafo(v, a, str(g))
 
-    g = Grafo(v)
-    [g.add_aresta(arestas[i][0], arestas[i][1], 0.0) for i in range(a)]
-    
-    printGrafo(v, a, str(g))
-
-    ag = AlgoritmoGenetico(g)
-    melhor_colocacao: Individuo = ag.execute(geracoes=60)
-    print('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
-    print('Melhor fitness final: ', melhor_colocacao.value)
-    printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
+        ag = AlgoritmoGenetico(g)
+        ag_inicio = datetime.now()
+        melhor_colocacao: Individuo = ag.execute(geracoes=300)
+        ag_fim = datetime.now()
+        print('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
+        print('Melhor fitness final: ', melhor_colocacao.value)
+        print('Tempo de execução: ', ag_fim - ag_inicio)
+        print()
+        # printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
