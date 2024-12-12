@@ -52,7 +52,7 @@ class AlgoritmoGenetico:
     def construtivo_aleatorio(self):
         populacao = []
         for _ in range(self.tamanho_populacao):
-            cromossomo = [randint(1, self.grafo.V) for _ in range(self.grafo.V)]
+            cromossomo = [int(random()*10) for _ in range(self.grafo.V)]
             f = self.fitness(cromossomo)
             populacao.append(Individuo(cromossomo, f['fo'], f['c'], f['p'], f['d']))
         return populacao
@@ -93,11 +93,10 @@ class AlgoritmoGenetico:
     def execute(self, geracoes=1000):
         populacao = self.construtivo_aleatorio()
         melhor_inicial = max(populacao, key=lambda ind: ind.value)
-        print('Melhor cromossomo do construtivo:', melhor_inicial.cromossomo)
+        # print('Melhor cromossomo do construtivo:', melhor_inicial.cromossomo)
         print('Qtd cores:', melhor_inicial.qtd_cores)
         print('Penalidade restrição de arestas:', melhor_inicial.rest_aresta)
         print('Desequilibrio de cores:', melhor_inicial.desequilibrio)
-        print('Melhor fitness do construtivo: ', melhor_inicial.value)
 
         for geracao in range(geracoes):
             elites, nao_elites = self.set_elite(populacao)
@@ -134,13 +133,12 @@ def main():
 
     ag = AlgoritmoGenetico(g)
     ag_inicio = datetime.now()
-    melhor_colocacao: Individuo = ag.execute(geracoes=500)
+    melhor_colocacao: Individuo = ag.execute(geracoes=700)
     ag_fim = datetime.now()
-    print('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
+    # print('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
     print('Qtd cores:', melhor_colocacao.qtd_cores)
     print('Penalidade restrição de arestas:', melhor_colocacao.rest_aresta)
     print('Desequilibrio de cores:', melhor_colocacao.desequilibrio)
-    print('Melhor fitness final: ', melhor_colocacao.value)
     print('Tempo de execução: ', ag_fim - ag_inicio)
     print()
     # printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
