@@ -1,0 +1,10 @@
+Instância: S10.txt 
+Grafo com 10 vértices e 9 arestas
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 2
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores:2
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.329750

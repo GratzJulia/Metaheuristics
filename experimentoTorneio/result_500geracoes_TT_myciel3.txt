@@ -1,0 +1,10 @@
+Instância: myciel3.txt 
+Grafo com 11 vértices e 20 arestas
+Qtd cores: 7
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores:0
+GAP: 25.0
+Tempo de execução: 0:00:00.403297

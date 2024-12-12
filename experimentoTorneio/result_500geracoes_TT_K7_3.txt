@@ -1,0 +1,10 @@
+Instância: K7_3.txt 
+Grafo com 35 vértices e 70 arestas
+Qtd cores: 10
+Penalidade restrição de arestas: 3
+Desequilibrio de cores: 18
+Qtd cores: 9
+Penalidade restrição de arestas: 0
+Desequilibrio de cores:0
+GAP: 200.0
+Tempo de execução: 0:00:01.340158

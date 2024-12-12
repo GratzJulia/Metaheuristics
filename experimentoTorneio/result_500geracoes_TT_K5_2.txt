@@ -1,0 +1,10 @@
+Instância: K5_2.txt 
+Grafo com 10 vértices e 15 arestas
+Qtd cores: 6
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 0
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores:0
+GAP: 66.66666666666666
+Tempo de execução: 0:00:00.246905

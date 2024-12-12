@@ -1,0 +1,10 @@
+Instância: myciel4.txt 
+Grafo com 23 vértices e 71 arestas
+Qtd cores: 10
+Penalidade restrição de arestas: 2
+Desequilibrio de cores: 3
+Qtd cores: 10
+Penalidade restrição de arestas: 0
+Desequilibrio de cores:0
+GAP: 100.0
+Tempo de execução: 0:00:00.892719

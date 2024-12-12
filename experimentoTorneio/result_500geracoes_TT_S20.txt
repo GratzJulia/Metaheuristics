@@ -1,0 +1,10 @@
+Instância: S20.txt 
+Grafo com 20 vértices e 19 arestas
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 3
+Qtd cores: 7
+Penalidade restrição de arestas: 0
+Desequilibrio de cores:2
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.578942

@@ -84,19 +84,30 @@ class AlgoritmoGenetico:
         vencedores_indices = torneios[np.arange(N), np.argmax(fitness[torneios], axis=1)]
         return [populacao[idx] for idx in vencedores_indices]
 
-    def roleta(self, populacao, fitness_populacao):
-        min_fitness = min(fitness_populacao)
-        ajustado = [f - min_fitness + 1 for f in fitness_populacao]
-        pais = choices(populacao, weights=ajustado, k=len(populacao) // 2)
-        return pais
+
+    def roleta_numpy(self, populacao, m: int):
+        fitness = np.array([-ind.value for ind in populacao])
+
+        if np.min(fitness) < 0:
+            fitness -= np.min(fitness)
+
+        if np.sum(fitness) == 0:
+            probabilities = np.full(len(populacao), 1 / len(populacao))
+        else:
+            probabilities = fitness / np.sum(fitness)  # Probabilidades proporcionais ao fitness
+
+        selecionados_indices = np.random.choice(len(populacao), size=m, p=probabilities, replace=True)
+
+        return [populacao[i] for i in selecionados_indices]
+
 
     def execute(self, geracoes=1000):
         populacao = self.construtivo_aleatorio()
         melhor_inicial = max(populacao, key=lambda ind: ind.value)
-        # print('Melhor cromossomo do construtivo:', melhor_inicial.cromossomo)
-        print('Qtd cores:', melhor_inicial.qtd_cores)
-        print('Penalidade restrição de arestas:', melhor_inicial.rest_aresta)
-        print('Desequilibrio de cores:', melhor_inicial.desequilibrio)
+        # resultado.write('Melhor cromossomo do construtivo:', melhor_inicial.cromossomo)
+        resultado.write(f'\nQtd cores: {melhor_inicial.qtd_cores}')
+        resultado.write(f'\nPenalidade restrição de arestas: {melhor_inicial.rest_aresta}')
+        resultado.write(f'\nDesequilibrio de cores: {melhor_inicial.desequilibrio}')
 
         for geracao in range(geracoes):
             elites, nao_elites = self.set_elite(populacao)
@@ -107,6 +118,7 @@ class AlgoritmoGenetico:
                 probabilidade_cruz = random()
                 probabilidade_mut = random()
                 if probabilidade_cruz < 0.94:
+                    # pais = self.roleta_numpy(populacao, 2)
                     pais = self.torneio_numpy(populacao, 2)
                     filho1 = self.crossover(pais[0], pais[1])
                     filho2 = self.crossover(pais[1], pais[0])
@@ -118,6 +130,7 @@ class AlgoritmoGenetico:
                     self.mutacao(aleatorio[0])
 
             uniao = populacao + novos_individuos
+            # escolhidos = self.roleta_numpy(uniao, len(nao_elites))
             escolhidos = self.torneio_numpy(uniao, len(nao_elites))
             populacao.clear()
             populacao.extend(nova_populacao + escolhidos)
@@ -128,23 +141,56 @@ class AlgoritmoGenetico:
 def main():
     g = Grafo(v)
     [g.add_aresta(arestas[i][0], arestas[i][1], 0.0) for i in range(a)]
-    print(g)
+    resultado.write(str(g))
     # printGrafo(v, a, str(g))
 
     ag = AlgoritmoGenetico(g)
     ag_inicio = datetime.now()
-    melhor_colocacao: Individuo = ag.execute(geracoes=700)
+    melhor_colocacao: Individuo = ag.execute(geracoes=500)
     ag_fim = datetime.now()
-    # print('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
-    print('Qtd cores:', melhor_colocacao.qtd_cores)
-    print('Penalidade restrição de arestas:', melhor_colocacao.rest_aresta)
-    print('Desequilibrio de cores:', melhor_colocacao.desequilibrio)
-    print('Tempo de execução: ', ag_fim - ag_inicio)
-    print()
+    # resultado.write('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
+    resultado.write(f'\nQtd cores: {melhor_colocacao.qtd_cores}')
+    resultado.write(f'\nPenalidade restrição de arestas: { melhor_colocacao.rest_aresta}')
+    resultado.write(f'\nDesequilibrio de cores: {melhor_colocacao.desequilibrio}')
+    if TARGET.get(nome) is None:
+        resultado.write(f'\nGAP: -- não há target na literatura para esta instância')
+    else:
+        resultado.write(f'\nGAP: {((melhor_colocacao.qtd_cores + melhor_colocacao.rest_aresta + melhor_colocacao.desequilibrio)- TARGET.get(nome)) / TARGET.get(nome)*100}')
+    resultado.write(f'\nTempo de execução: {ag_fim - ag_inicio}\n')
+
     # printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
 
 if __name__ == "__main__":
+    TARGET = {
+        'S09.txt': None,
+        '1-FullIns_3.txt': 4,
+        'S20.txt': None,
+        'ale70_10_1.col': 4,
+        'ale50_10_5.col': 3,
+        'K7_2.txt': 6,
+        'K5_2.txt': 3,
+        'ale70_10_4.col': 4,
+        'ale60_10_4.col': 4,
+        'ale50_10_1.col': 4,
+        'ale50_10_4.col': 4,
+        'ale60_10_1.col': 4,
+        'K7_3.txt': 3,
+        'ale50_10_3.col': 4,
+        'ale50_10_2.col': 3,
+        '2-FullIns_3.txt': 5,
+        'ale60_10_3.col': 4,
+        'ale70_10_2.col': 4,
+        'ale60_10_2.col': 4,
+        'ale70_10_5.col': 4,
+        'ale60_10_5.col': 4,
+        'myciel4.txt': 5,
+        'myciel3.txt': 4,
+        'S10.txt': None,
+        'ale70_10_3.col': 4,
+    }
+
     for nome in instancias():
         v, a, arestas = read_DIMACS('./input-data/' + nome)
-        print('Instância: ', nome)
-        main()
+        with open(f"result_500geracoes_TT_{nome}", "w") as resultado:
+            resultado.write(f'Instância: {nome} \n')
+            main()

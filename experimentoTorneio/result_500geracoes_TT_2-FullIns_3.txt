@@ -1,0 +1,10 @@
+Instância: 2-FullIns_3.txt 
+Grafo com 52 vértices e 201 arestas
+Qtd cores: 10
+Penalidade restrição de arestas: 10
+Desequilibrio de cores: 17
+Qtd cores: 12
+Penalidade restrição de arestas: 0
+Desequilibrio de cores:0
+GAP: 140.0
+Tempo de execução: 0:00:03.244017
