@@ -1,0 +1,106 @@
+Instância: S20.txt 
+Grafo com 20 vértices e 19 arestas
+
+RODADA: 1
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 21
+Qtd cores: 8
+Penalidade restrição de arestas: 1
+Desequilibrio de cores: 10
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.859145
+
+RODADA: 2
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 7
+Qtd cores: 9
+Penalidade restrição de arestas: 2
+Desequilibrio de cores: 8
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.924023
+
+RODADA: 3
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 4
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 8
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.927276
+
+RODADA: 4
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 10
+Qtd cores: 9
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 13
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:01.004417
+
+RODADA: 5
+Qtd cores: 9
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 2
+Qtd cores: 10
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 20
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.895741
+
+RODADA: 6
+Qtd cores: 9
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 4
+Qtd cores: 8
+Penalidade restrição de arestas: 1
+Desequilibrio de cores: 28
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.893657
+
+RODADA: 7
+Qtd cores: 9
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 7
+Qtd cores: 11
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 10
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.945887
+
+RODADA: 8
+Qtd cores: 9
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 4
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 19
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.854071
+
+RODADA: 9
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 2
+Qtd cores: 11
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 3
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.945754
+
+RODADA: 10
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 11
+Qtd cores: 8
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 7
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.940032
+
+Tempo Médio = 0:00:00.919000
+GAP Médio = nan
+Desvio Padrão do GAP = nan

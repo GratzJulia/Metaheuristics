@@ -1,0 +1,106 @@
+Instância: ale50_10_4.col 
+Grafo com 50 vértices e 117 arestas
+
+RODADA: 1
+Qtd cores: 10
+Penalidade restrição de arestas: 5
+Desequilibrio de cores: 18
+Qtd cores: 20
+Penalidade restrição de arestas: 2
+Desequilibrio de cores: 24
+GAP: 1050.0
+Tempo de execução: 0:00:03.903352
+
+RODADA: 2
+Qtd cores: 10
+Penalidade restrição de arestas: 5
+Desequilibrio de cores: 34
+Qtd cores: 17
+Penalidade restrição de arestas: 1
+Desequilibrio de cores: 71
+GAP: 2125.0
+Tempo de execução: 0:00:03.907473
+
+RODADA: 3
+Qtd cores: 10
+Penalidade restrição de arestas: 5
+Desequilibrio de cores: 26
+Qtd cores: 16
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 33
+GAP: 1125.0
+Tempo de execução: 0:00:03.890040
+
+RODADA: 4
+Qtd cores: 10
+Penalidade restrição de arestas: 5
+Desequilibrio de cores: 14
+Qtd cores: 20
+Penalidade restrição de arestas: 3
+Desequilibrio de cores: 29
+GAP: 1200.0
+Tempo de execução: 0:00:03.923363
+
+RODADA: 5
+Qtd cores: 10
+Penalidade restrição de arestas: 5
+Desequilibrio de cores: 34
+Qtd cores: 21
+Penalidade restrição de arestas: 4
+Desequilibrio de cores: 31
+GAP: 1300.0
+Tempo de execução: 0:00:03.943045
+
+RODADA: 6
+Qtd cores: 10
+Penalidade restrição de arestas: 4
+Desequilibrio de cores: 42
+Qtd cores: 18
+Penalidade restrição de arestas: 2
+Desequilibrio de cores: 30
+GAP: 1150.0
+Tempo de execução: 0:00:03.929453
+
+RODADA: 7
+Qtd cores: 10
+Penalidade restrição de arestas: 5
+Desequilibrio de cores: 36
+Qtd cores: 18
+Penalidade restrição de arestas: 2
+Desequilibrio de cores: 35
+GAP: 1275.0
+Tempo de execução: 0:00:03.777321
+
+RODADA: 8
+Qtd cores: 10
+Penalidade restrição de arestas: 6
+Desequilibrio de cores: 28
+Qtd cores: 24
+Penalidade restrição de arestas: 2
+Desequilibrio de cores: 47
+GAP: 1725.0
+Tempo de execução: 0:00:03.918437
+
+RODADA: 9
+Qtd cores: 10
+Penalidade restrição de arestas: 2
+Desequilibrio de cores: 32
+Qtd cores: 20
+Penalidade restrição de arestas: 1
+Desequilibrio de cores: 51
+GAP: 1700.0
+Tempo de execução: 0:00:03.886386
+
+RODADA: 10
+Qtd cores: 10
+Penalidade restrição de arestas: 5
+Desequilibrio de cores: 36
+Qtd cores: 22
+Penalidade restrição de arestas: 1
+Desequilibrio de cores: 42
+GAP: 1525.0
+Tempo de execução: 0:00:03.963577
+
+Tempo Médio = 0:00:03.904245
+GAP Médio = 1417.5
+Desvio Padrão do GAP = 325.58601014171353
