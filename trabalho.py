@@ -38,9 +38,9 @@ class AlgoritmoGenetico:
         desequilibrio = 0
         for ccount in cor_count.values():
             if ccount < floor_val:
-                desequilibrio += (floor_val - ccount) 
+                desequilibrio += (floor_val - ccount) ** 2
             elif ccount > ceil_val:
-                desequilibrio += (ccount - ceil_val) 
+                desequilibrio += (ccount - ceil_val) ** 2
 
         return {"fo": float(penalidade_aresta * 1000 + qtd_cores * 100 + desequilibrio * 10), "p": penalidade_aresta, "c": qtd_cores, "d": desequilibrio}
 
