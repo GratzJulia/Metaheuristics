@@ -1,6 +1,6 @@
 from random import choices, randint, random, sample
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -38,9 +38,9 @@ class AlgoritmoGenetico:
         desequilibrio = 0
         for ccount in cor_count.values():
             if ccount < floor_val:
-                desequilibrio += (floor_val - ccount) ** 2
+                desequilibrio += (floor_val - ccount) 
             elif ccount > ceil_val:
-                desequilibrio += (ccount - ceil_val) ** 2
+                desequilibrio += (ccount - ceil_val) 
 
         return {"fo": float(penalidade_aresta * 1000 + qtd_cores * 100 + desequilibrio * 10), "p": penalidade_aresta, "c": qtd_cores, "d": desequilibrio}
 
@@ -58,7 +58,7 @@ class AlgoritmoGenetico:
         return populacao
 
     def set_elite(self, populacao: list):
-        fitness_ordenado = sorted(populacao, key=lambda i: i.value, reverse=True)
+        fitness_ordenado = sorted(populacao, key=lambda i:(i.value, -i.qtd_cores), reverse=True)
         melhores = fitness_ordenado[:int(self.len_elites)]
         piores = fitness_ordenado[int(self.len_elites):]
         return melhores, piores
@@ -84,7 +84,6 @@ class AlgoritmoGenetico:
         vencedores_indices = torneios[np.arange(N), np.argmax(fitness[torneios], axis=1)]
         return [populacao[idx] for idx in vencedores_indices]
 
-
     def roleta_numpy(self, populacao, m: int):
         fitness = np.array([-ind.value for ind in populacao])
 
@@ -99,7 +98,6 @@ class AlgoritmoGenetico:
         selecionados_indices = np.random.choice(len(populacao), size=m, p=probabilities, replace=True)
 
         return [populacao[i] for i in selecionados_indices]
-
 
     def execute(self, geracoes=1000):
         populacao = self.construtivo_aleatorio()
@@ -135,7 +133,7 @@ class AlgoritmoGenetico:
             populacao.clear()
             populacao.extend(nova_populacao + escolhidos)
 
-        melhor_individuo = max(populacao, key=lambda ind: ind.value)
+        melhor_individuo = max(populacao, key=lambda ind: (ind.value, -ind.qtd_cores))
         return melhor_individuo
 
 def main():
@@ -145,18 +143,31 @@ def main():
     # printGrafo(v, a, str(g))
 
     ag = AlgoritmoGenetico(g)
-    ag_inicio = datetime.now()
-    melhor_colocacao: Individuo = ag.execute(geracoes=500)
-    ag_fim = datetime.now()
-    # resultado.write('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
-    resultado.write(f'\nQtd cores: {melhor_colocacao.qtd_cores}')
-    resultado.write(f'\nPenalidade restrição de arestas: { melhor_colocacao.rest_aresta}')
-    resultado.write(f'\nDesequilibrio de cores: {melhor_colocacao.desequilibrio}')
-    if TARGET.get(nome) is None:
-        resultado.write(f'\nGAP: -- não há target na literatura para esta instância')
-    else:
-        resultado.write(f'\nGAP: {((melhor_colocacao.qtd_cores + melhor_colocacao.rest_aresta + melhor_colocacao.desequilibrio)- TARGET.get(nome)) / TARGET.get(nome)*100}')
-    resultado.write(f'\nTempo de execução: {ag_fim - ag_inicio}\n')
+    tempo_medio = []
+    gap_medio = []
+    for rodada_instancia in range(10):
+        resultado.write(f'\n\nRODADA: {rodada_instancia + 1}')
+
+        ag_inicio = datetime.now()
+        melhor_colocacao: Individuo = ag.execute(geracoes=700)
+        ag_fim = datetime.now()
+        # resultado.write('Melhor cromossomo final: ', melhor_colocacao.cromossomo)
+        resultado.write(f'\nQtd cores: {melhor_colocacao.qtd_cores}')
+        resultado.write(f'\nPenalidade restrição de arestas: { melhor_colocacao.rest_aresta}')
+        resultado.write(f'\nDesequilibrio de cores: {melhor_colocacao.desequilibrio}')
+        if TARGET.get(nome) is None:
+            resultado.write(f'\nGAP: -- não há target na literatura para esta instância')
+        else:
+            gap = ((melhor_colocacao.qtd_cores + melhor_colocacao.rest_aresta + melhor_colocacao.desequilibrio)- TARGET.get(nome)) / TARGET.get(nome)*100
+            gap_medio.append(gap)
+            resultado.write(f'\nGAP: {gap}')
+        te = ag_fim - ag_inicio
+        tempo_medio.append(te)
+        resultado.write(f'\nTempo de execução: {te}')
+
+    resultado.write(f'\n\nTempo Médio = {sum(tempo_medio, timedelta()) / 10}')
+    resultado.write(f'\nGAP Médio = {np.mean(gap_medio) if TARGET.get(nome) is not None else None}')
+    resultado.write(f'\nDesvio Padrão do GAP = {np.std(gap_medio) if TARGET.get(nome) is not None else None}\n')
 
     # printGrafo(v, a, str(g) + " \nFitness da solução: " + str(melhor_colocacao.value), melhor_colocacao.cromossomo)
 
@@ -191,6 +202,6 @@ if __name__ == "__main__":
 
     for nome in instancias():
         v, a, arestas = read_DIMACS('./input-data/' + nome)
-        with open(f"result_500geracoes_TT_{nome}", "w") as resultado:
+        with open(f"result_700geracoes_TT_{nome}", "w") as resultado:
             resultado.write(f'Instância: {nome} \n')
             main()
