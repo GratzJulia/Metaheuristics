@@ -80,10 +80,10 @@ class AlgoritmoGenetico:
         individuo.desequilibrio = f['d']
         return individuo
 
-    def torneio_numpy(self, populacao, N, q = 2):
-        fitness = np.array([ind.value for ind in populacao])
+    def torneio_numpy(self, populacao, N, q = 3):
         torneios = np.random.choice(len(populacao), size=(N, q), replace=True)
-        vencedores_indices = torneios[np.arange(N), np.argmax(fitness[torneios], axis=1)]
+        fitness = np.array([ind.value for ind in populacao])
+        vencedores_indices = [t[np.argmax(fitness[t])] for t in torneios]
         return [populacao[idx] for idx in vencedores_indices]
 
     def roleta_numpy(self, populacao, m: int):
