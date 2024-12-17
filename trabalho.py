@@ -1,5 +1,6 @@
-from random import choices, randint, random, sample
+from random import randint, random, sample
 from collections import Counter
+from copy import deepcopy
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -77,6 +78,7 @@ class AlgoritmoGenetico:
         individuo.qtd_cores = f['c']
         individuo.rest_aresta = f['p']
         individuo.desequilibrio = f['d']
+        return individuo
 
     def torneio_numpy(self, populacao, N, q = 2):
         fitness = np.array([ind.value for ind in populacao])
@@ -109,7 +111,7 @@ class AlgoritmoGenetico:
 
         for geracao in range(geracoes):
             elites, nao_elites = self.set_elite(populacao)
-            nova_populacao = elites.copy()
+            nova_populacao = deepcopy(elites)
             novos_individuos = []
 
             while len(novos_individuos) < self.len_nao_elites:
@@ -125,7 +127,8 @@ class AlgoritmoGenetico:
                 
                 if probabilidade_mut <= 0.05:
                     aleatorio = sample(nao_elites, 1)
-                    self.mutacao(aleatorio[0])
+                    mutado = self.mutacao(deepcopy(aleatorio[0]))
+                    novos_individuos.append(mutado)
 
             uniao = populacao + novos_individuos
             # escolhidos = self.roleta_numpy(uniao, len(nao_elites))
