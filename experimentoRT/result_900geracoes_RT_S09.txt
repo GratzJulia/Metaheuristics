@@ -1,0 +1,106 @@
+Instância: S09.txt 
+Grafo com 9 vértices e 8 arestas
+
+RODADA: 1
+Qtd cores: 6
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.889547
+
+RODADA: 2
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 3
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.894906
+
+RODADA: 3
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 0
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.924852
+
+RODADA: 4
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 2
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.835105
+
+RODADA: 5
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 2
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.885376
+
+RODADA: 6
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 4
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.878942
+
+RODADA: 7
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 2
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 0
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.804236
+
+RODADA: 8
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 2
+Qtd cores: 3
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 4
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.964387
+
+RODADA: 9
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.910458
+
+RODADA: 10
+Qtd cores: 5
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 2
+Qtd cores: 4
+Penalidade restrição de arestas: 0
+Desequilibrio de cores: 1
+GAP: -- não há target na literatura para esta instância
+Tempo de execução: 0:00:00.915643
+
+Tempo Médio = 0:00:00.890345
+GAP Médio = None
+Desvio Padrão do GAP = None
