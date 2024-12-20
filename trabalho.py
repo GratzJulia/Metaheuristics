@@ -43,7 +43,7 @@ class AlgoritmoGenetico:
             elif ccount > ceil_val:
                 desequilibrio += (ccount - ceil_val) ** 2
 
-        return {"fo": float(penalidade_aresta * 1000 + qtd_cores * 100 + desequilibrio * 10), "p": penalidade_aresta, "c": qtd_cores, "d": desequilibrio}
+        return {"fo": float(penalidade_aresta * 1000 + qtd_cores * 100 + desequilibrio), "p": penalidade_aresta, "c": qtd_cores, "d": desequilibrio}
 
     def fitness(self, cromossomo):
         obj = self.FO(cromossomo)
@@ -87,15 +87,12 @@ class AlgoritmoGenetico:
         return [populacao[idx] for idx in vencedores_indices]
 
     def roleta_numpy(self, populacao, m: int):
-        fitness = np.array([-ind.value for ind in populacao])
-
-        if np.min(fitness) < 0:
-            fitness -= np.min(fitness)
-
+        fitness = np.array([ind.value for ind in populacao])
+        sum = np.sum(fitness)
         if np.sum(fitness) == 0:
             probabilities = np.full(len(populacao), 1 / len(populacao))
         else:
-            probabilities = fitness / np.sum(fitness)  # Probabilidades proporcionais ao fitness
+            probabilities = fitness / sum
 
         selecionados_indices = np.random.choice(len(populacao), size=m, p=probabilities, replace=True)
 
